@@ -3,6 +3,7 @@ import { CRUDRepositoryInterface } from "@readme/core";
 import { BlogPostEntity } from "./blog-post.entity";
 import { PostInterface } from '@readme/shared-types'
 import { PrismaService } from "../../prisma/prisma.service";
+import { PostQuery } from "./query/post.query";
 
 @Injectable()
 export class BlogPostRepository implements CRUDRepositoryInterface<BlogPostEntity, number, PostInterface>{
@@ -11,11 +12,26 @@ export class BlogPostRepository implements CRUDRepositoryInterface<BlogPostEntit
 
   }
 
-  public async find(): Promise<PostInterface[]> {
+  public async find({limit, userId, postType, postTag, sortBy, sortDirection, page} : PostQuery): Promise<PostInterface[]> {
+
     return this.prisma.post.findMany({
+      where: {
+        userId: userId,
+        postType: postType,
+        tags: postTag ? {hasSome: [postTag]} : undefined,
+      },
+      take: limit,
       include: {
         comments: true
-      }
+      },
+      orderBy: [
+        {
+          creationDate: sortBy === 'creationDate' ? sortDirection : undefined,
+          likeCount: sortBy === 'likeCount' ? sortDirection : undefined,
+          commentCount: sortBy === 'commentCount' ? sortDirection : undefined
+        },
+      ],
+      skip: page > 0 ? limit * (page - 1) : undefined,
     });
   }
 

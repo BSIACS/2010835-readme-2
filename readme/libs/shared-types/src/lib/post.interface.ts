@@ -21,4 +21,5 @@ export interface PostInterface{
   link?: string;                  //link
   tags?: string[];                //video, photo, text, quote, link
   comments?: CommentInterface[];
+  commentsCount?: number;
 }

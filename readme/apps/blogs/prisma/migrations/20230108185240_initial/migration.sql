@@ -1,0 +1,11 @@
+-- DropForeignKey
+ALTER TABLE "Comment" DROP CONSTRAINT "Comment_postId_fkey";
+
+-- AlterTable
+ALTER TABLE "Post" ADD COLUMN     "commentCount" INTEGER NOT NULL DEFAULT 0,
+ALTER COLUMN "originUserId" SET DEFAULT '',
+ALTER COLUMN "originPostId" SET DEFAULT 0,
+ALTER COLUMN "publishDate" SET DEFAULT CURRENT_TIMESTAMP;
+
+-- AddForeignKey
+ALTER TABLE "Comment" ADD CONSTRAINT "Comment_postId_fkey" FOREIGN KEY ("postId") REFERENCES "Post"("id") ON DELETE CASCADE ON UPDATE CASCADE;

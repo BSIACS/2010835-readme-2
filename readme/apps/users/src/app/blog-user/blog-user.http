@@ -1,0 +1,27 @@
+# Subscribe to user by id
+GET  http://localhost:3333/api/bloguser/subscribe/63b83c3227387df514d4408b  HTTP/1.1
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2M2I4M2MzMDI3Mzg3ZGY1MTRkNDQwODciLCJlbWFpbCI6InVzZXJAbm90Zm91bmQuY29tIiwibmFtZSI6IlVzZXIiLCJzdXJuYW1lIjoiVXNlciIsImlhdCI6MTY3MzAzMjIxNywiZXhwIjoxNjczMDMyNTE3fQ.dsdfu_xnb5fdIvOINvVHJ-NcGI7nvGT9Kx1PpyzzBFM
+
+###
+
+# Unsubscribe user by id
+GET  http://localhost:3333/api/bloguser/unsubscribe/63b83c3227387df514d4408b  HTTP/1.1
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2M2I4M2MzNTI3Mzg3ZGY1MTRkNDQwOGYiLCJlbWFpbCI6ImphbWVzQG5vdGZvdW5kLmNvbSIsIm5hbWUiOiJKYW1lcyIsInN1cm5hbWUiOiJEb2UiLCJpYXQiOjE2NzMwMzI0MzUsImV4cCI6MTY3MzAzMjczNX0.cA7NOl3ALBSNdtjOwYv6lSOs96AjKrZL3T4EF_hVfpM
+
+###
+
+# Get subscribers
+GET  http://localhost:3333/api/bloguser/subscribers  HTTP/1.1
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2M2IzM2E3YjExOTQ0YjZlNDllNzM1ZTAiLCJlbWFpbCI6ImphbWVzQG5vdGZvdW5kLmNvbSIsIm5hbWUiOiJKYW1lcyIsInN1cm5hbWUiOiJEb2UiLCJpYXQiOjE2NzI3ODAzMDIsImV4cCI6MTY3Mjc4MDYwMn0.C_TpOy8fs0cqDKofzgF8ve4xpoGUwwzUPXjRP80oXOA
+
+###
+
+# Get subscriptions
+GET  http://localhost:3333/api/bloguser/subscriptions  HTTP/1.1
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2M2I4M2MzNTI3Mzg3ZGY1MTRkNDQwOGYiLCJlbWFpbCI6ImphbWVzQG5vdGZvdW5kLmNvbSIsIm5hbWUiOiJKYW1lcyIsInN1cm5hbWUiOiJEb2UiLCJpYXQiOjE2NzMwMTg0ODgsImV4cCI6MTY3MzAxODc4OH0.2dvBIqeq4_acI0H45sCjeiQ2w1yMWj_KJxYLsGRDD3U
+
+###

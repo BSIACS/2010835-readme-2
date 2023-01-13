@@ -32,6 +32,7 @@ model Post{
   link                    String @default("")
   tags                    String[] @default([])
   comments                Comment[]
+  commentCount            Int @default(0)
 }
 
 model Comment {

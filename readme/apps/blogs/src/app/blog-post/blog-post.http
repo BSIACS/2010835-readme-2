@@ -1,20 +1,19 @@
 #Get all posts
-GET http://localhost:3333/api/posts HTTP/1.1
+GET http://localhost:3334/api/posts/?page=1&sortBy=creationDate HTTP/1.1
 
 ###
 
 #Get post by Id
-GET http://localhost:3333/api/posts/14 HTTP/1.1
+GET http://localhost:3334/api/posts/14 HTTP/1.1
 
 ###
 
 #Create new post
-POST http://localhost:3333/api/posts HTTP/1.1
+POST http://localhost:3334/api/posts HTTP/1.1
 Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2M2I4M2MzNTI3Mzg3ZGY1MTRkNDQwOGYiLCJlbWFpbCI6ImphbWVzQG5vdGZvdW5kLmNvbSIsIm5hbWUiOiJKYW1lcyIsInN1cm5hbWUiOiJEb2UiLCJpYXQiOjE2NzMyODQ2ODEsImV4cCI6MTY3MzI4NDk4MX0.BuJ8sX_r5i9ER92nSA8DVOr5s9rXfLQy2e3bB7Pa-mE
 
 {
-  "userId": "384",
-  "originUserId": "",
   "postType": "quote",
   "postState": "published",
   "isRepost": false,
@@ -26,7 +25,7 @@ Content-Type: application/json
 ###
 
 #Update post
-PATCH http://localhost:3333/api/posts/14 HTTP/1.1
+PATCH http://localhost:3334/api/posts/14 HTTP/1.1
 Content-Type: application/json
 
 {
@@ -36,6 +35,6 @@ Content-Type: application/json
 ###
 
 #Delete post
-DELETE http://localhost:3333/api/posts/14 HTTP/1.1
+DELETE http://localhost:3334/api/posts/14 HTTP/1.1
 
 ###
