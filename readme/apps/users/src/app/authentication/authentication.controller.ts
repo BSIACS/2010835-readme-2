@@ -1,4 +1,4 @@
-import { Controller, Post, Body, Get, Param, HttpCode, HttpStatus, UsePipes, UseGuards, Request } from '@nestjs/common';
+import { Controller, Post, Body, Get, Param, HttpCode, HttpStatus, UsePipes, UseGuards, Request, Delete } from '@nestjs/common';
 import { fillObject } from '@readme/core';
 import { AuthenticationService } from './authentication.service';
 import { CreateUserDto } from './dto/create-user.dto';
@@ -13,6 +13,9 @@ import { MongoidValidationPipe } from '../pipes/mongoid-validation.pipe';
 import { JwtAuthenticationGuard } from './guards/jwt-authentication.guard';
 import { ChangeUserPasswordDto } from './dto/change-user-password.dto';
 import { changeUserPasswordValidationScheme } from './validation-scheme/change-user-password.scheme';
+import { RefreshJwtRdo } from './rdo/refresh-jwt.rdo';
+import { RefreshJwtDto } from './dto/refresh-jwt.dto';
+import { UserInterface } from '@readme/shared-types';
 
 @ApiTags('authentication')
 @Controller('authentication')
@@ -49,7 +52,33 @@ export class AuthenticationController {
   public async login(@Body() loginUserDto: LoginUserDto){
     const verifiedUser = await this.authenticationService.verify(loginUserDto);
 
-    return this.authenticationService.loginUser(verifiedUser);
+    return this.authenticationService.createJwtTokens(verifiedUser);
+  }
+
+  @Post('refresh')
+  @ApiResponse({
+    type: LoginUserRdo,
+    status: HttpStatus.OK,
+    description: 'Tokens created successfully'
+  })
+  @ApiResponse({
+    status: HttpStatus.UNAUTHORIZED,
+    description: 'Refresh token is invalid.',
+  })
+  public async refreshJwtTokens(@Body() refreshJwtDto : RefreshJwtDto) : Promise<RefreshJwtRdo>{
+
+    return this.authenticationService.updateJwtTokens(refreshJwtDto.userId, refreshJwtDto.refreshToken);
+  }
+
+  @Delete('logout')
+  @ApiResponse({
+    type: LoginUserRdo,
+    status: HttpStatus.OK,
+    description: 'Refresh token deleted successfully'
+  })
+  public async logout(@Body() logoutDto : {userId : string}) : Promise<UserInterface>{
+
+    return this.authenticationService.clearRefreshToken(logoutDto.userId);
   }
 
   @UseGuards(JwtAuthenticationGuard)
@@ -60,7 +89,7 @@ export class AuthenticationController {
     status: HttpStatus.OK,
     description: 'User found'
   })
-  async show(@Param('id', MongoidValidationPipe) id: string) {
+  public async show(@Param('id', MongoidValidationPipe) id: string) {
     const existUser = await this.authenticationService.getUser(id);
 
     return fillObject(ShowUserRdo, existUser);
@@ -75,7 +104,7 @@ export class AuthenticationController {
     description: 'Password changed successfully'
   })
   @UsePipes(new JoiValidationPipe<ChangeUserPasswordDto>(changeUserPasswordValidationScheme))
-  async changePassword(@Request() req, @Body() changeUserPasswordDto: ChangeUserPasswordDto) : Promise<void>{
+  public async changePassword(@Request() req, @Body() changeUserPasswordDto: ChangeUserPasswordDto) : Promise<void>{
     await this.authenticationService.changePassword(req.user.email, changeUserPasswordDto);
   }
 }

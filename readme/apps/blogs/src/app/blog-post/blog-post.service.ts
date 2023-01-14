@@ -26,10 +26,10 @@ export class BlogPostService {
     return this.blogPostRepository.create(postEntity);
   }
 
-  async updatePost(id: number, dto: UpdatePostDto): Promise<PostInterface>{
+  async updatePost(userId: number, dto: UpdatePostDto): Promise<PostInterface>{
     const postEntity = new BlogPostEntity({...dto});
 
-    return this.blogPostRepository.update(id, postEntity);
+    return this.blogPostRepository.update(dto.id, postEntity);
   }
 
   async deletePost(id: number): Promise<void> {

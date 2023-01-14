@@ -41,6 +41,9 @@ export class BlogUserModel extends Document implements UserInterface {
 
   @Prop()
   subscribersQuantity: number;
+
+  @Prop()
+  refreshToken: string;
 }
 
 export const BlogUserSchema = SchemaFactory.createForClass(BlogUserModel);

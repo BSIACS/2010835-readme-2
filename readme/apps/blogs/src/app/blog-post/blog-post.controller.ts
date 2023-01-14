@@ -58,15 +58,16 @@ export class BlogPostController{
     return post;
   }
 
-  @Patch('/:id')
+  @Patch('/')
   @ApiResponse({
     status: HttpStatus.OK,
     description: 'The post has been successfully updated.'
   })
   @UseGuards(JwtAuthenticationGuard)
   @UsePipes(new JoiValidationPipe<UpdatePostDto>(updatePostValidationScheme))
-  async updatePost(@Body() dto: UpdatePostDto, @Param('id', ParseIntPipe) id: number) {
-    const post = await this.blogPostService.updatePost(id, dto);
+  async updatePost(@Request() req, @Body() dto: UpdatePostDto) {
+
+    const post = await this.blogPostService.updatePost(req.user._id, dto);
 
     return post;
   }
@@ -74,7 +75,7 @@ export class BlogPostController{
   @Delete('/:id')
   @UseGuards(JwtAuthenticationGuard)
   @ApiResponse({
-    status: HttpStatus.CREATED,
+    status: HttpStatus.OK,
     description: 'The post has been successfully deleted.'
   })
   async deletePost(@Param('id', ParseIntPipe) id: number): Promise<void> {
