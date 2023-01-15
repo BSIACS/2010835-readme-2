@@ -5,6 +5,7 @@ import { BlogPostModule } from './blog-post/blog-post.module';
 import { ENV_FILE_PATH } from './app.constants';
 import { jwtConfig } from '../config/jwt.config';
 import { CommentModule } from './comment/comment.module';
+import { rabbitMqOptions } from '../config/rabbitmq.config';
 
 @Module({
   imports: [
@@ -12,7 +13,7 @@ import { CommentModule } from './comment/comment.module';
       cache: true,
       isGlobal: true,
       envFilePath: ENV_FILE_PATH,
-      load: [jwtConfig],
+      load: [jwtConfig, rabbitMqOptions],
     }),
     BlogPostModule,
     CommentModule,

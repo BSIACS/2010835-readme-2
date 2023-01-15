@@ -81,4 +81,10 @@ export class BlogPostController{
   async deletePost(@Param('id', ParseIntPipe) id: number): Promise<void> {
     await this.blogPostService.deletePost(id);
   }
+
+  @Post('/sendPostsNotificationData')
+  async sendNewPostsNotitficationData() : Promise<void>{
+
+    return this.blogPostService.sendNewPostsData();
+  }
 }
