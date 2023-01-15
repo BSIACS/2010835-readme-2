@@ -35,8 +35,6 @@ export class BlogPostEntity implements EntityInterface<BlogPostEntity>, PostInte
   }
 
   public fillEntity(entity: PostInterface) {
-    console.log(`Tags - ${entity.tags}`);
-
     this.id = entity.id;
     this.originPostId = entity.originPostId;
     this.userId = entity.userId;

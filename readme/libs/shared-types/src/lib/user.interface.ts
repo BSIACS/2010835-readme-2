@@ -8,4 +8,5 @@ export interface UserInterface{
   registerDate: Date;
   postQuantity: number;
   subscribersQuantity: number;
+  refreshToken?: string;
 }

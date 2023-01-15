@@ -3,11 +3,12 @@ import { UnauthorizedException, UnprocessableEntityException } from '@nestjs/com
 import { JwtService } from '@nestjs/jwt';
 import { BlogUserEntity } from '../blog-user/blog-user.entity';
 import { BlogUserRepository } from '../blog-user/blog-user.repository';
-import { AUTH_USER_EXISTS, AUTH_USER_NOT_FOUND, AUTH_USER_PASSWORD_WRONG } from './authentication.constants';
+import { AUTH_USER_EXISTS, AUTH_USER_NOT_FOUND, AUTH_USER_PASSWORD_WRONG, LOGOUT_ERROR } from './authentication.constants';
 import { CreateUserDto } from './dto/create-user.dto';
 import { LoginUserDto } from './dto/login-user.dto';
 import { UserInterface } from '@readme/shared-types';
 import { ChangeUserPasswordDto } from './dto/change-user-password.dto';
+import { RefreshJwtRdo } from './rdo/refresh-jwt.rdo';
 
 
 @Injectable()
@@ -32,7 +33,6 @@ export class AuthenticationService{
 
   public async verify(loginUserDto: LoginUserDto){
     const existUser = await this.repository.findByEmail(loginUserDto.email);
-    console.log(`existUser ===== ${existUser}`);
 
     if(!existUser){
       throw new UnauthorizedException(AUTH_USER_NOT_FOUND);
@@ -51,17 +51,26 @@ export class AuthenticationService{
     return this.repository.findById(id);
   }
 
-  public async loginUser(user: UserInterface) {
-    const payload = {
+  public async createJwtTokens(user: UserInterface) : Promise<RefreshJwtRdo>  {
+    const accessTokenPayload = {
       sub: user._id,
       email: user.email,
       name: user.name,
       surname: user.surname
     };
-    console.log(`payload +++++ ${payload.sub}`);
+
+    const refreshTokenPayload = {
+      sub: user._id,
+    }
+
+    const accessToken = await this.jwtService.signAsync(accessTokenPayload);
+    const refreshToken = await this.jwtService.signAsync(refreshTokenPayload);
+
+    await this.repository.updateRefreshToken(user._id, refreshToken);
 
     return {
-      access_token: await this.jwtService.signAsync(payload),
+      accessToken: accessToken,
+      refreshToken: refreshToken,
     };
   }
 
@@ -81,6 +90,40 @@ export class AuthenticationService{
     await userEntity.setPassword(changeUserPasswordDto.newPassword);
 
     await this.repository.update(userEntity._id, userEntity);
+  }
+
+  public async updateJwtTokens(id : string, refreshToken : string) : Promise<RefreshJwtRdo>{
+    let userId = '';
+
+    try{
+      const {sub} = await this.jwtService.verifyAsync(refreshToken);
+      userId = sub;
+    }
+    catch{
+      throw new UnauthorizedException();
+    }
+
+    if(userId !== id){
+      throw new UnauthorizedException();
+    }
+
+    const foundUser = await this.repository.findById(userId);
+
+    if(foundUser.refreshToken !== refreshToken){
+      throw new UnauthorizedException();
+    }
+
+    return this.createJwtTokens(foundUser);
+  }
+
+  public async clearRefreshToken(userId : string) : Promise<UserInterface> {
+    const operationResult = await this.repository.clearRefreshToken(userId);
+
+    if(operationResult.refreshToken !== ''){
+      throw new UnauthorizedException(LOGOUT_ERROR);
+    }
+
+    return operationResult
   }
 }
 

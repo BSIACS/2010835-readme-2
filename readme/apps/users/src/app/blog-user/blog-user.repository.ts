@@ -58,32 +58,6 @@ export class BlogUserRepository implements CRUDRepositoryInterface<BlogUserEntit
       .exec();
   }
 
-  public async subscribe2(subscriberId : string, publisherId : string){
-    const session = await this.blogUserModel.startSession();
-
-    session.startTransaction();
-
-    try{
-      await this.blogUserModel
-        .updateOne({ _id: publisherId }, {$addToSet: { subscribers: subscriberId }})
-        .session(session);
-
-      await this.blogUserModel
-        .updateOne({ _id: subscriberId }, {$addToSet: { subscriptions: publisherId }})
-        .session(session);
-
-      await session.commitTransaction();
-    }
-    catch(error){
-      await session.abortTransaction();
-
-      throw error;
-    }
-    finally{
-      session.endSession();
-    }
-  }
-
   public async getSubscribersIds(userId : string){
     return this.subscriptionModel
       .find({publisherId: userId}, {subscriberId: 1, _id: 0 })
@@ -98,5 +72,17 @@ export class BlogUserRepository implements CRUDRepositoryInterface<BlogUserEntit
 
   public async destroy(id: string): Promise<void> {
     this.blogUserModel.deleteOne({id});
+  }
+
+  public async updateRefreshToken(userId : string, refreshToken : string) : Promise<UserInterface>{
+    return this.blogUserModel
+      .findByIdAndUpdate(userId, {refreshToken: refreshToken}, {new: true})
+      .exec();
+  }
+
+  public async clearRefreshToken(userId : string) : Promise<UserInterface>{
+    return this.blogUserModel
+      .findByIdAndUpdate(userId, {refreshToken: ''}, {new: true})
+      .exec();
   }
 }

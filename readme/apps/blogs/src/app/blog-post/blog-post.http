@@ -11,7 +11,7 @@ GET http://localhost:3334/api/posts/14 HTTP/1.1
 #Create new post
 POST http://localhost:3334/api/posts HTTP/1.1
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2M2I4M2MzNTI3Mzg3ZGY1MTRkNDQwOGYiLCJlbWFpbCI6ImphbWVzQG5vdGZvdW5kLmNvbSIsIm5hbWUiOiJKYW1lcyIsInN1cm5hbWUiOiJEb2UiLCJpYXQiOjE2NzMyODQ2ODEsImV4cCI6MTY3MzI4NDk4MX0.BuJ8sX_r5i9ER92nSA8DVOr5s9rXfLQy2e3bB7Pa-mE
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2M2MxYzZlOWI2ZDg3OTNlZTViY2E3MDkiLCJlbWFpbCI6ImpvaG5kb2VAc29tZW1haWwuY29tIiwibmFtZSI6IkpvaG4iLCJzdXJuYW1lIjoiRG9lIiwiaWF0IjoxNjczNjk3MjE4LCJleHAiOjE2NzM2OTgxMTh9.X0vxANVw-y_A09ej7LonKXj9qTrdcGLBgyFYTIv-JfQ
 
 {
   "postType": "quote",
@@ -25,11 +25,14 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2M2I4M2MzN
 ###
 
 #Update post
-PATCH http://localhost:3334/api/posts/14 HTTP/1.1
+PATCH http://localhost:3334/api/posts HTTP/1.1
 Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2M2MxYzZlOWI2ZDg3OTNlZTViY2E3MDkiLCJlbWFpbCI6ImpvaG5kb2VAc29tZW1haWwuY29tIiwibmFtZSI6IkpvaG4iLCJzdXJuYW1lIjoiRG9lIiwiaWF0IjoxNjczNjk3MjE4LCJleHAiOjE2NzM2OTgxMTh9.X0vxANVw-y_A09ej7LonKXj9qTrdcGLBgyFYTIv-JfQ
 
 {
-  "text": "По большей части будущее подобно прошедшему."
+  "id": 14,
+  "text": "По большей части будущее подобно прошедшему"
+
 }
 
 ###

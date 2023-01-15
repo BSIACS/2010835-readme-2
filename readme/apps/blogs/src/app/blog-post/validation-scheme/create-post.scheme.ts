@@ -1,9 +1,7 @@
 import Joi = require("joi");
 
 export const createPostValidationScheme = Joi.object({
-  id: Joi.number().required(),
-  originPostId: Joi.number().required(),
-  userId: Joi.string().required(),
+  originPostId: Joi.number().optional(),
   originUserId: Joi.string().optional(),
   postType: Joi.string().required(),
   postState: Joi.string().required(),

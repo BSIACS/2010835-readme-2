@@ -2,6 +2,12 @@ import { ApiProperty } from "@nestjs/swagger";
 
 export class UpdatePostDto{
   @ApiProperty({
+    description: 'Post Id',
+    example: 168493
+  })
+  id: number;
+
+  @ApiProperty({
     description: 'The Id of the origin post (if repost)',
     example: 785291
   })

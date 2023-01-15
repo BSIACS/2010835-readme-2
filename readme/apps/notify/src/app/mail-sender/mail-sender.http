@@ -1,0 +1,6 @@
+#Get all posts
+GET http://localhost:3335/api/notify/index HTTP/1.1
+
+###
+
+
