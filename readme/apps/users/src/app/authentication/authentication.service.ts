@@ -1,14 +1,15 @@
-import { Injectable } from '@nestjs/common';
+import { Inject, Injectable } from '@nestjs/common';
 import { UnauthorizedException, UnprocessableEntityException } from '@nestjs/common/exceptions';
 import { JwtService } from '@nestjs/jwt';
 import { BlogUserEntity } from '../blog-user/blog-user.entity';
 import { BlogUserRepository } from '../blog-user/blog-user.repository';
-import { AUTH_USER_EXISTS, AUTH_USER_NOT_FOUND, AUTH_USER_PASSWORD_WRONG, LOGOUT_ERROR } from './authentication.constants';
+import { AUTH_USER_EXISTS, AUTH_USER_NOT_FOUND, AUTH_USER_PASSWORD_WRONG, LOGOUT_ERROR, RABBITMQ_SERVICE } from './authentication.constants';
 import { CreateUserDto } from './dto/create-user.dto';
 import { LoginUserDto } from './dto/login-user.dto';
-import { UserInterface } from '@readme/shared-types';
+import { CommandEvent, UserInterface } from '@readme/shared-types';
 import { ChangeUserPasswordDto } from './dto/change-user-password.dto';
 import { RefreshJwtRdo } from './rdo/refresh-jwt.rdo';
+import { ClientProxy } from '@nestjs/microservices';
 
 
 @Injectable()
@@ -16,6 +17,7 @@ export class AuthenticationService{
   constructor(
     private readonly repository : BlogUserRepository,
     private readonly jwtService : JwtService,
+    @Inject(RABBITMQ_SERVICE) private readonly rabbitClient: ClientProxy,
   ){}
 
   public async create(createUserDto: CreateUserDto){
@@ -28,7 +30,19 @@ export class AuthenticationService{
     const userEntity = new BlogUserEntity(user);
     await userEntity.setPassword(password);
 
-    return this.repository.create(userEntity);
+    const createdUser = await this.repository.create(userEntity);
+
+    this.rabbitClient.emit(
+      { cmd: CommandEvent.AddSubscriber },
+      {
+        email: createdUser.email,
+        name: createdUser.name,
+        surname: createdUser.surname,
+        userId: createdUser._id.toString(),
+      }
+    );
+
+    return createdUser;
   }
 
   public async verify(loginUserDto: LoginUserDto){
