@@ -27,6 +27,10 @@ export class MailSubscriberRepository implements CRUDRepositoryInterface<MailSub
         .exec();
   }
 
+  public async getAll() : Promise<SubscriberInterface[] | null>{
+    return this.mailSubscriberModel.find();
+  }
+
   public async update(id: string, item: MailSubscriberEntity): Promise<SubscriberInterface> {
     return this.mailSubscriberModel
       .findByIdAndUpdate(id, item.toObject(), { new: true })

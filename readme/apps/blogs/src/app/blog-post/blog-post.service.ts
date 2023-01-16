@@ -1,5 +1,7 @@
 import { Inject, Injectable } from "@nestjs/common";
+import { NotFoundException } from "@nestjs/common/exceptions";
 import { ClientProxy } from "@nestjs/microservices";
+import { parseNewPostNotification } from "@readme/core";
 import { CommandEvent, PostInterface } from "@readme/shared-types";
 import { RABBITMQ_SERVICE } from "./blog-post.constants";
 import { BlogPostEntity } from "./blog-post.entity";
@@ -39,12 +41,19 @@ export class BlogPostService {
     this.blogPostRepository.destroy(id);
   }
 
-  async sendNewPostsData() : Promise<void>{
+  async sendNewPostsData(userId : string) : Promise<void>{
+    const findedPosts = await this.blogPostRepository.findPublishedByUserId(userId);
+
+    if(!findedPosts.length){
+      throw new NotFoundException('New posts not found');
+    }
+
+    const notificationData = findedPosts.map(post => parseNewPostNotification(post));
+
     this.rabbitClient.emit(
       { cmd: CommandEvent.SendNewPosts },
       {
-        userId: '421342',
-        postIds: ['test', 'data', '42']
+        posts: notificationData,
       }
     );
   }

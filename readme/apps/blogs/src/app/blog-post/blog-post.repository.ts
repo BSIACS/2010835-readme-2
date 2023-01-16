@@ -35,6 +35,16 @@ export class BlogPostRepository implements CRUDRepositoryInterface<BlogPostEntit
     });
   }
 
+  public async findPublishedByUserId(userId : string): Promise<PostInterface[]> {
+
+    return this.prisma.post.findMany({
+      where: {
+        userId: userId,
+        isSent: false
+      }
+    });
+  }
+
   public async findById(id: number): Promise<PostInterface | null> {
     return this.prisma.post.findFirst({
       where: {

@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { MailerService } from '@nestjs-modules/mailer';
-import { SubscriberInterface } from '@readme/shared-types';
+import { NewPostNotificationInterface, SubscriberInterface } from '@readme/shared-types';
+import { parseNewPostTextContent } from '@readme/core';
 
 @Injectable()
 export class MailSenderService {
@@ -15,6 +16,21 @@ export class MailSenderService {
         user: `${subscriber.name} ${subscriber.surname}` ,
         email: `${subscriber.email}`,
       }
+    })
+  }
+
+  public async sendNewPostsNotification(posts : NewPostNotificationInterface[], subscribers : SubscriberInterface[]) {
+    subscribers.forEach(async (subscriber) => {
+      await this.mailerService.sendMail({
+        to: `${subscriber}`,
+        subject: 'Новые публикации',
+        template: './new-posts-noification-email',
+        context: {
+          title: `Новые публикации`,
+          publisherName: `Mr. Bronski`,
+          posts: posts.map((post) => parseNewPostTextContent(post)),
+        }
+      })
     })
   }
 }

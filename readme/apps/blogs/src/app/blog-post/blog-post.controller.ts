@@ -82,9 +82,10 @@ export class BlogPostController{
     await this.blogPostService.deletePost(id);
   }
 
+  @UseGuards(JwtAuthenticationGuard)
   @Post('/sendPostsNotificationData')
-  async sendNewPostsNotitficationData() : Promise<void>{
+  async sendNewPostsNotitficationData(@Request() req) : Promise<void>{
 
-    return this.blogPostService.sendNewPostsData();
+    return this.blogPostService.sendNewPostsData(req.user._id);
   }
 }

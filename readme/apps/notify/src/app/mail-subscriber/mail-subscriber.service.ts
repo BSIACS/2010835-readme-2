@@ -4,6 +4,7 @@ import { CreateSubscriberDto } from './dto/create-subscriber.dto';
 import { EMAIL_SUBSCRIBER_EXISTS } from './mail-subscriber.constants';
 import { MailSubscriberEntity } from './mail-subscriber.entity';
 import { MailSenderService } from '../mail-sender/mail-sender.service';
+import { NewPostNotificationInterface, SubscriberInterface } from '@readme/shared-types';
 
 @Injectable()
 export class MailSubscriberService {
@@ -24,5 +25,11 @@ export class MailSubscriberService {
 
     return this.mailSubscriberRepository
       .create(new MailSubscriberEntity(subscriber));
+  }
+
+  public async notifyNewPosts(posts : NewPostNotificationInterface[] ){
+    const subscribers : SubscriberInterface[] = await this.mailSubscriberRepository.getAll();
+
+    this.mailSenderService.sendNewPostsNotification(posts, subscribers);
   }
 }
