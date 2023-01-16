@@ -1,4 +1,4 @@
-import { Injectable } from "@nestjs/common";
+import { BadRequestException, Injectable } from "@nestjs/common";
 import { CRUDRepositoryInterface } from "@readme/core";
 import { BlogPostEntity } from "./blog-post.entity";
 import { PostInterface } from '@readme/shared-types'
@@ -40,9 +40,30 @@ export class BlogPostRepository implements CRUDRepositoryInterface<BlogPostEntit
     return this.prisma.post.findMany({
       where: {
         userId: userId,
-        isSent: false
+        postState: 'published',
+        isSent: false,
       }
     });
+  }
+
+  public async setAllIsSentByUserId(userId : string) : Promise<number> {
+
+    try {
+      const updatedPosts = await this.prisma.post.updateMany({
+        where: {
+          userId,
+          postState: 'published',
+          isSent: false,
+        },
+        data: {
+          isSent: true,
+        }
+      });
+
+      return updatedPosts.count;
+    } catch(e) {
+      throw new BadRequestException();
+    }
   }
 
   public async findById(id: number): Promise<PostInterface | null> {

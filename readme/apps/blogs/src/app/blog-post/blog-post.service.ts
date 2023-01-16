@@ -48,6 +48,8 @@ export class BlogPostService {
       throw new NotFoundException('New posts not found');
     }
 
+    await this.blogPostRepository.setAllIsSentByUserId(userId)
+
     const notificationData = findedPosts.map(post => parseNewPostNotification(post));
 
     this.rabbitClient.emit(
