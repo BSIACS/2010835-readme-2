@@ -5,3 +5,4 @@ export const INCORRECT_POST_PARAMETERS = 'Incorrect POST parameters';
 export const REFRESH_TOKEN_IS_INVALID = 'Refresh token is invalid';
 export const LOGOUT_ERROR = 'Logout error';
 
+export const RABBITMQ_SERVICE = Symbol('RABBITMQ_SERVICE');

@@ -7,6 +7,7 @@ import { getMongoDbConfig, mongoDbOptions } from './config/mongodb.config';
 import { rabbitMqOptions } from './config/rabbitmq.config';
 import { validateEnvironments } from './env.validation';
 import { MailSenderModule } from './mail-sender/mail-sender.module';
+import { MailSubscriberModule } from './mail-subscriber/mail-subscriber.module';
 
 @Module({
   imports: [
@@ -19,6 +20,7 @@ import { MailSenderModule } from './mail-sender/mail-sender.module';
     }),
     MongooseModule.forRootAsync(getMongoDbConfig()),
     MailSenderModule,
+    MailSubscriberModule,
   ],
   controllers: [],
   providers: [],

@@ -11,6 +11,6 @@ export class MailSenderController{
 
   @Get('/index')
   public async index(){
-    this.mailSender.sendNotifications();
+    //this.mailSender.sendNotification();
   }
 }

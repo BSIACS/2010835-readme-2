@@ -41,3 +41,10 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2M2MxYzZlO
 DELETE http://localhost:3334/api/posts/14 HTTP/1.1
 
 ###
+
+#Send post notification data
+POST  http://localhost:3334/api/posts/sendPostsNotificationData HTTP/1.1
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2M2M1NjRjYTJjYjgwMDkwNjg5MjRlNDgiLCJlbWFpbCI6ImpvaG5kb2VAc29tZW1haWwuY29tIiwibmFtZSI6IkpvaG4iLCJzdXJuYW1lIjoiRG9lIiwiaWF0IjoxNjczODgxNTg4LCJleHAiOjE2NzM4ODI0ODh9.fApr2mwQ7hGqYsANMIfw0LBLzQ7NugbGOSH39SXNG9M
+
+
+###
