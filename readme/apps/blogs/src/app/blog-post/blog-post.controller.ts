@@ -34,6 +34,17 @@ export class BlogPostController{
     return posts
   }
 
+  @Post('/search')
+  @ApiResponse({
+    status: HttpStatus.OK,
+    description: 'The post has been successfully founded.'
+  })
+  async search(@Body() searchDto: {textContent : string}) {
+    const posts = await this.blogPostService.getPostsByIncludedNameTextContent(searchDto.textContent);
+
+    return posts
+  }
+
   @Get(':id')
   @ApiResponse({
     status: HttpStatus.OK,

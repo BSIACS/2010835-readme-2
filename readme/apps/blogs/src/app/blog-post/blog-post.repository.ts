@@ -35,6 +35,18 @@ export class BlogPostRepository implements CRUDRepositoryInterface<BlogPostEntit
     });
   }
 
+  public async findByIncludedNameTextContent(textContent : string): Promise<PostInterface[]> {
+    return this.prisma.post.findMany({
+      where: {
+        name: {
+          contains: textContent,
+          mode: 'insensitive'
+        }
+      },
+      take: 20,
+    })
+  }
+
   public async findPublishedByUserId(userId : string): Promise<PostInterface[]> {
 
     return this.prisma.post.findMany({

@@ -2,7 +2,7 @@ import { Inject, Injectable } from "@nestjs/common";
 import { NotFoundException } from "@nestjs/common/exceptions";
 import { ClientProxy } from "@nestjs/microservices";
 import { parseNewPostNotification } from "@readme/core";
-import { CommandEvent, PostInterface, PostState, PostType } from "@readme/shared-types";
+import { CommandEvent, PostInterface, PostState } from "@readme/shared-types";
 import { RABBITMQ_SERVICE } from "./blog-post.constants";
 import { BlogPostEntity } from "./blog-post.entity";
 import { BlogPostRepository } from "./blog-post.repository";
@@ -19,6 +19,10 @@ export class BlogPostService {
 
   async getPosts(query : PostQuery): Promise<PostInterface[]> {
     return this.blogPostRepository.find(query);
+  }
+
+  async getPostsByIncludedNameTextContent(textContent: string): Promise<PostInterface[]> {
+    return this.blogPostRepository.findByIncludedNameTextContent(textContent);
   }
 
   async getPost(id: number): Promise<PostInterface> {
