@@ -22,6 +22,7 @@ export class BlogPostEntity implements EntityInterface<BlogPostEntity>, PostInte
   public link: string;
   public tags: string[];
   public comments: CommentInterface[];
+  public isSent: boolean;
 
   constructor(post: PostInterface){
     this.fillEntity(post);
@@ -55,6 +56,7 @@ export class BlogPostEntity implements EntityInterface<BlogPostEntity>, PostInte
     this.link = entity.link;
     this.tags = entity.tags;
     this.comments = [];
+    this.isSent = entity.isSent;
   }
 
 }
