@@ -7,7 +7,7 @@ export class JoiValidationPipe<T> implements PipeTransform<T>{
 
   async transform(value: T, { type }: ArgumentMetadata){
     if (type !== 'body') {
-      throw new Error('This pipe must used only with params!')
+      return value as T;
     }
 
     try {
