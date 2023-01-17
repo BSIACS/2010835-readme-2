@@ -1,5 +1,6 @@
 import { Controller, Get, Post, Patch, Delete, Param, ParseIntPipe, Body, Query, UsePipes, UseGuards, Request, HttpStatus } from "@nestjs/common";
 import { ApiBody, ApiResponse, ApiTags } from "@nestjs/swagger";
+import { PostInterface } from "@readme/shared-types";
 import { JoiValidationPipe } from "../pipes/joi-validation.pipe";
 import { ParsePostQueryPipe } from "../pipes/parse-post-query.pipe";
 import { BlogPostService } from "./blog-post.service";
@@ -109,6 +110,26 @@ export class BlogPostController{
   })
   async deletePost(@Param('id', ParseIntPipe) id: number): Promise<void> {
     await this.blogPostService.deletePost(id);
+  }
+
+  @Post('/addLike')
+  @ApiResponse({
+    status: HttpStatus.OK,
+    description: 'Like added successfully'
+  })
+  @UseGuards(JwtAuthenticationGuard)
+  async addLike(@Request() req, @Body() dto: {postId: number}): Promise<PostInterface> {
+    return this.blogPostService.addLikeIfUnset(dto.postId, req.user._id);
+  }
+
+  @Post('/removeLike')
+  @ApiResponse({
+    status: HttpStatus.OK,
+    description: 'Like removed successfully'
+  })
+  @UseGuards(JwtAuthenticationGuard)
+  async removeLike(@Request() req, @Body() dto: {postId: number}): Promise<PostInterface> {
+    return this.blogPostService.removeLikeIfSet(dto.postId, req.user._id);
   }
 
   @UseGuards(JwtAuthenticationGuard)

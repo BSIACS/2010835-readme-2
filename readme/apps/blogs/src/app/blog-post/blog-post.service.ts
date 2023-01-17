@@ -69,6 +69,26 @@ export class BlogPostService {
     this.blogPostRepository.destroy(id);
   }
 
+  async addLikeIfUnset(postId : number, userId : string) : Promise<PostInterface>{
+    const flag = await this.blogPostRepository.checkHasLikeByUserId(postId, userId);
+
+    if(flag){
+      return null;
+    }
+
+    return this.blogPostRepository.addLike(postId, userId);
+  }
+
+  async removeLikeIfSet(postId : number, userId : string) : Promise<PostInterface>{
+    const flag = await this.blogPostRepository.checkHasLikeByUserId(postId, userId);
+
+    if(!flag){
+      return null;
+    }
+
+    return this.blogPostRepository.removeLike(postId, userId);
+  }
+
   async sendNewPostsData(userId : string) : Promise<void>{
     const findedPosts = await this.blogPostRepository.findPublishedByUserId(userId);
 

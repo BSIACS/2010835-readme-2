@@ -39,7 +39,7 @@ POST http://localhost:3333/api/authentication/login HTTP/1.1
 Content-Type: application/json
 
 {
-  "email": "jane@somemail.com",
+  "email": "johndoe@somemail.com",
   "password": "222222"
 }
 
