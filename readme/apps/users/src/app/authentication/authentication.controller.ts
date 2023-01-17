@@ -1,4 +1,4 @@
-import { Controller, Post, Body, Get, Param, HttpCode, HttpStatus, UsePipes, UseGuards, Request, Delete } from '@nestjs/common';
+import { Controller, Post, Body, Get, Param, HttpCode, HttpStatus, UsePipes, UseGuards, Request, Delete, UseInterceptors, UploadedFile, ParseFilePipeBuilder } from '@nestjs/common';
 import { fillObject } from '@readme/core';
 import { AuthenticationService } from './authentication.service';
 import { CreateUserDto } from './dto/create-user.dto';
@@ -16,6 +16,8 @@ import { changeUserPasswordValidationScheme } from './validation-scheme/change-u
 import { RefreshJwtRdo } from './rdo/refresh-jwt.rdo';
 import { RefreshJwtDto } from './dto/refresh-jwt.dto';
 import { UserInterface } from '@readme/shared-types';
+import { FileInterceptor } from '@nestjs/platform-express/multer';
+import { diskStorage } from 'multer';
 
 @ApiTags('authentication')
 @Controller('authentication')
@@ -25,14 +27,33 @@ export class AuthenticationController {
     private readonly authenticationService: AuthenticationService
   ){}
 
-  @Post('register')
+  @Post("/register")
   @ApiResponse({
     type: CreateUserRdo,
     status: HttpStatus.CREATED,
     description: 'The new user has been successfully created.'
   })
+  @UseInterceptors(FileInterceptor('file', {
+    storage: diskStorage({
+      destination: './upload',
+      filename: (req, file, callback) => {
+        let extension = file.mimetype;
+        extension = extension.slice(extension.indexOf('/') + 1, extension.length);
+
+        const filename = req.body.email;
+
+        callback(null, `${filename}.${extension}`);
+      }
+    })
+  }))
   @UsePipes(new JoiValidationPipe<CreateUserDto>(createUserValidationScheme))
-  public async register(@Body() createUserDto: CreateUserDto){
+  async register(
+    @UploadedFile(
+      new ParseFilePipeBuilder()
+      .addFileTypeValidator({fileType: /(jpg|jpeg|png)$/i,})
+      .addMaxSizeValidator({maxSize: 500000}).build({})
+    ) file: Express.Multer.File, @Body() createUserDto : CreateUserDto) {
+
     const createdUser = await this.authenticationService.create(createUserDto);
 
     return fillObject(CreateUserRdo, createdUser);

@@ -22,4 +22,5 @@ export interface PostInterface{
   tags?: string[];                //video, photo, text, quote, link
   comments?: CommentInterface[];
   commentsCount?: number;
+  isSent?: boolean;
 }

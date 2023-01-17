@@ -45,11 +45,11 @@ export class BlogUserController {
     return this.blogUserService.getSubscribers(req.user._id);
   }
 
-   @UseGuards(JwtAuthenticationGuard)
-   @Get('/subscriptions')
-   @UsePipes()
-   public async getSubscriptions(@Request() req){
+  @UseGuards(JwtAuthenticationGuard)
+  @Get('/subscriptions')
+  @UsePipes()
+  public async getSubscriptions(@Request() req){
 
-     return this.blogUserService.getSubscriptions(req.user._id);
-   }
+    return this.blogUserService.getSubscriptions(req.user._id);
+  }
 }

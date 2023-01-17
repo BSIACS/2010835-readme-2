@@ -37,6 +37,49 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2M2MxYzZlO
 
 ###
 
+#Create repost
+POST  http://localhost:3334/api/posts/repost HTTP/1.1
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2M2M1MWZlYTc5MmIzMzBkN2UyZWQ0NWUiLCJlbWFpbCI6ImphbmVkb2VAc29tZW1haWwuY29tIiwibmFtZSI6IkphbmUiLCJzdXJuYW1lIjoiRG9lIiwiaWF0IjoxNjczOTY4MjY2LCJleHAiOjE2NzM5NjkxNjZ9.h3urxjqIrtGLfVc03f28E-Rr2PAgqIIysDODFaeiQS8
+
+{
+  "id": 2
+}
+
+###
+
+#Search repost
+POST  http://localhost:3334/api/posts/search HTTP/1.1
+Content-Type: application/json
+
+{
+  "textContent": "космосе"
+}
+
+###
+
+#Add like
+POST  http://localhost:3334/api/posts/addLike HTTP/1.1
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2M2M1NjRjYTJjYjgwMDkwNjg5MjRlNDgiLCJlbWFpbCI6ImpvaG5kb2VAc29tZW1haWwuY29tIiwibmFtZSI6IkpvaG4iLCJzdXJuYW1lIjoiRG9lIiwiaWF0IjoxNjczOTc2MDY1LCJleHAiOjE2NzM5NzY5NjV9.mG9OgQ3UmfthesJskSFi-Coa0TrphRlUN9hqJd-93dk
+
+{
+  "postId": 1
+}
+
+###
+
+#Remove like
+POST  http://localhost:3334/api/posts/removeLike HTTP/1.1
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2M2M1NjRjYTJjYjgwMDkwNjg5MjRlNDgiLCJlbWFpbCI6ImpvaG5kb2VAc29tZW1haWwuY29tIiwibmFtZSI6IkpvaG4iLCJzdXJuYW1lIjoiRG9lIiwiaWF0IjoxNjczOTc2MDY1LCJleHAiOjE2NzM5NzY5NjV9.mG9OgQ3UmfthesJskSFi-Coa0TrphRlUN9hqJd-93dk
+
+{
+  "postId": 1
+}
+
+###
+
 #Delete post
 DELETE http://localhost:3334/api/posts/14 HTTP/1.1
 

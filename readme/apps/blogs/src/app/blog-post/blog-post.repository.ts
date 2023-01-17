@@ -35,6 +35,18 @@ export class BlogPostRepository implements CRUDRepositoryInterface<BlogPostEntit
     });
   }
 
+  public async findByIncludedNameTextContent(textContent : string): Promise<PostInterface[]> {
+    return this.prisma.post.findMany({
+      where: {
+        name: {
+          contains: textContent,
+          mode: 'insensitive'
+        }
+      },
+      take: 20,
+    })
+  }
+
   public async findPublishedByUserId(userId : string): Promise<PostInterface[]> {
 
     return this.prisma.post.findMany({
@@ -113,4 +125,67 @@ export class BlogPostRepository implements CRUDRepositoryInterface<BlogPostEntit
     });
   }
 
+  async checkHasLikeByUserId(postId : number, userId : string) : Promise<boolean>{
+    const foundPost = await this.prisma.post.findMany({
+      where: {
+        id: postId,
+        likeUsers: {
+          hasSome: [userId]
+        },
+      }
+    })
+
+    if(foundPost.length <= 0){
+      return false;
+    }
+
+    return true;
+  }
+
+  async addLike(postId : number, userId){
+    return this.prisma.post.update({
+      where: {
+        id: postId,
+      },
+      data: {
+        likeUsers: {
+          push: userId
+        },
+        likeCount: {
+          increment: 1
+        }
+      }
+    })
+  }
+
+  async removeLike(postId : number, userId : string){
+    const {likeUsers} = await this.prisma.post.findFirst({
+      where: {
+        id: postId,
+        likeUsers: {
+          hasSome: [userId]
+        },
+      },
+      select: {likeUsers: true}
+    })
+
+    const newLikeUser = likeUsers.filter((id) => id !== userId)
+
+    const result = await this.prisma.post.update({
+      where: {
+        id: postId,
+      },
+      data: {
+        likeUsers: {
+          set: [...newLikeUser]
+
+        },
+        likeCount: {
+          decrement: 1
+        }
+      }
+    })
+
+    return result;
+  }
 }
