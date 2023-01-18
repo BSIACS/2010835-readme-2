@@ -8,11 +8,13 @@ import { NestFactory } from '@nestjs/core';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { AppModule } from './app/app.module';
 
+const BLOGS_SERVICE_DEFAULT_PORT = 3334;
+
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   const globalPrefix = 'api';
   app.setGlobalPrefix(globalPrefix);
-  const port = process.env.PORT || 3334;
+  const port = process.env.PORT || BLOGS_SERVICE_DEFAULT_PORT;
 
   const config = new DocumentBuilder()
     .setTitle('The "Blogs" service')

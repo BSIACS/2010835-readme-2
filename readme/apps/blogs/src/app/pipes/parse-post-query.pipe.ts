@@ -1,12 +1,6 @@
 import { Injectable, PipeTransform } from "@nestjs/common";
+import { DEFAULT_PAGE_NUMBER, DEFAULT_POST_COUNT_LIMIT, DEFAULT_SORT_BY_PARAM, DEFAULT_SORT_DIRECTION } from "../app.constants";
 import { PostQuery } from "../blog-post/query/post.query";
-import { SortByEnum } from "../blog-post/query/sort-by.enum";
-import { SortDirectionEnum } from "../blog-post/query/sort-direction.enum";
-
-const DEFAULT_SORT_DIRECTION = SortDirectionEnum.Desc;
-const DEFAULT_SORT_BY_PARAM = SortByEnum.CreationDate;
-const DEFAULT_POST_COUNT_LIMIT = 25;
-const DEFAULT_PAGE_NUMBER = 1;
 
 
 @Injectable()

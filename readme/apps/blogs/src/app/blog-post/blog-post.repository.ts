@@ -1,9 +1,10 @@
 import { BadRequestException, Injectable } from "@nestjs/common";
 import { CRUDRepositoryInterface } from "@readme/core";
 import { BlogPostEntity } from "./blog-post.entity";
-import { PostInterface } from '@readme/shared-types'
+import { PostInterface, PostState } from '@readme/shared-types'
 import { PrismaService } from "../../prisma/prisma.service";
 import { PostQuery } from "./query/post.query";
+import { SortByEnum } from "./query/sort-by.enum";
 
 @Injectable()
 export class BlogPostRepository implements CRUDRepositoryInterface<BlogPostEntity, number, PostInterface>{
@@ -26,9 +27,9 @@ export class BlogPostRepository implements CRUDRepositoryInterface<BlogPostEntit
       },
       orderBy: [
         {
-          creationDate: sortBy === 'creationDate' ? sortDirection : undefined,
-          likeCount: sortBy === 'likeCount' ? sortDirection : undefined,
-          commentCount: sortBy === 'commentCount' ? sortDirection : undefined
+          creationDate: sortBy === SortByEnum.CreationDate ? sortDirection : undefined,
+          likeCount: sortBy === SortByEnum.LikeCount ? sortDirection : undefined,
+          commentCount: sortBy === SortByEnum.CommentCount ? sortDirection : undefined
         },
       ],
       skip: page > 0 ? limit * (page - 1) : undefined,
@@ -52,7 +53,7 @@ export class BlogPostRepository implements CRUDRepositoryInterface<BlogPostEntit
     return this.prisma.post.findMany({
       where: {
         userId: userId,
-        postState: 'published',
+        postState: PostState.Published,
         isSent: false,
       }
     });
@@ -64,7 +65,7 @@ export class BlogPostRepository implements CRUDRepositoryInterface<BlogPostEntit
       const updatedPosts = await this.prisma.post.updateMany({
         where: {
           userId,
-          postState: 'published',
+          postState: PostState.Published,
           isSent: false,
         },
         data: {

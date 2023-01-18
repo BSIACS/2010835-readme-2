@@ -9,6 +9,8 @@ import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app/app.module';
 import { getRabbitMqConfig } from './app/config/rabbitmq.config';
 
+const NOTIFY_SERVICE_DEFAULT_PORT = 3335;
+
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
@@ -22,7 +24,7 @@ async function bootstrap() {
 
   const globalPrefix = 'api';
   app.setGlobalPrefix(globalPrefix);
-  const port = process.env.PORT || 3335;
+  const port = process.env.PORT || NOTIFY_SERVICE_DEFAULT_PORT;
   await app.listen(port);
   Logger.log(
     `🚀 Application is running on: http://localhost:${port}/${globalPrefix}`

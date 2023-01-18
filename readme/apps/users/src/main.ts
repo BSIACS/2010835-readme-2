@@ -8,11 +8,13 @@ import { NestFactory } from '@nestjs/core';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import { AppModule } from './app/app.module';
 
+const USERS_SERVICE_DEFAULT_PORT = 3333;
+
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   const globalPrefix = 'api';
   app.setGlobalPrefix(globalPrefix);
-  const port = process.env.PORT || 3333;
+  const port = process.env.PORT || USERS_SERVICE_DEFAULT_PORT;
 
   const config = new DocumentBuilder()
   .setTitle('The "Users" service')
