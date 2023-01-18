@@ -1,7 +1,7 @@
 import { Controller } from "@nestjs/common";
 import { EventPattern } from "@nestjs/microservices";
 import { CommandEvent } from "@readme/shared-types";
-import { NewPostNotificationInterface } from "libs/shared-types/src/lib/new-posts-notification.interface";
+import { NewPostNotificationInterface } from '@readme/shared-types';
 import { CreateSubscriberDto } from "./dto/create-subscriber.dto";
 import { MailSubscriberService } from "./mail-subscriber.service";
 
